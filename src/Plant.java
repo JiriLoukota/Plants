@@ -52,7 +52,6 @@ public class Plant {
     }
 
     public void setLastWatering(LocalDate lastWatering) throws PlantException {
-        System.out.println(lastWatering);
         if(lastWatering.isAfter(this.planted) || lastWatering.isEqual(this.planted)) this.lastWatering = lastWatering;
         else throw new PlantException("Last watering can´t be before date of planting.");
     }
