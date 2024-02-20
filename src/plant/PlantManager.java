@@ -4,6 +4,7 @@ import exceptions.PlantException;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,12 +13,11 @@ public class PlantManager {
     private List<Plant> plantList;
     private String path;
     //Constructors
-
     public PlantManager(List<Plant> plantList) {
         this.plantList = plantList;
     }
-    public PlantManager(String path){
-
+    public PlantManager(String path) throws FileException {
+        loadFromFile(path);
     }
     //Special methods
     public void addPlant(Plant plant){
@@ -34,7 +34,8 @@ public class PlantManager {
     }
 
     public void loadFromFile(String path) throws FileException {
-        plantList.clear();
+        if(plantList!=null)plantList.clear();
+        else plantList = new ArrayList<>();
         Scanner scanner;
         try {
             scanner = new Scanner(new BufferedReader(new FileReader(path)));
@@ -54,17 +55,25 @@ public class PlantManager {
             }
         }
         this.path = path;
+        scanner.close();
         //loading from file, throws exception, one list per one file
     }
     public void updateFile() throws FileException {
-        try {
-            PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path)));
-            for(int i =0; i < plantList.size(); i++){
-                printWriter.println(String.valueOf(plantList.get(i)));
+        try (PrintWriter printWriter = new PrintWriter(new FileWriter(path))){
+            for (Plant plant : plantList) {
+                System.out.println(plant.toSavingFormat());
+                printWriter.println(plant.toSavingFormat());
             }
         } catch (IOException e) {
-            throw new FileException("Couldn't write to file: " + path + "because it couldn't be opened.");
+            throw new FileException("Couldn't write to file: " + path + "because it couldn't be opened,  or it doesn't exist.");
         }
     }
 
+    public List<Plant> getPlantList() {
+        return plantList;
+    }
+
+    public void setPlantList(List<Plant> plantList) {
+        this.plantList = plantList;
+    }
 }
