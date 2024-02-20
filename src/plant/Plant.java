@@ -1,3 +1,6 @@
+package plant;
+import exceptions.PlantException;
+
 import java.time.LocalDate;
 
 public class Plant {
@@ -69,5 +72,8 @@ public class Plant {
     //Special methods
     public String getWateringInfo(){
         return name + ": last watering:" + this.lastWatering + "; next watering: " + this.lastWatering.plusDays(this.frequencyOfWatering);
+    }
+    public String toSavingFormat(){
+        return name + "\t" + description + "\t" + frequencyOfWatering + "\t" + lastWatering + "\t" + planted;
     }
 }
