@@ -1,9 +1,8 @@
 package plant;
 import exceptions.PlantException;
-
 import java.time.LocalDate;
 
-public class Plant {
+public class Plant implements Comparable<Plant>{
     //Attributes
     private String name;
     private String description;
@@ -24,6 +23,7 @@ public class Plant {
     public Plant(String name) throws PlantException {
         this(name, "", LocalDate.now(), LocalDate.now(), 7);
     }
+
     //region Getters and setters
 
     public String getName() {
@@ -69,11 +69,30 @@ public class Plant {
     }
 
     //endregion
-    //Special methods
+    //region Special methods
+    //Returns info about watering as a String
     public String getWateringInfo(){
         return name + ": last watering:" + this.lastWatering + "; next watering: " + this.lastWatering.plusDays(this.frequencyOfWatering);
     }
+    //Changes data into form used for saving into files
     public String toSavingFormat(){
         return name + "\t" + description + "\t" + frequencyOfWatering + "\t" + lastWatering + "\t" + planted;
     }
+    //This method is used to compare two Plants by name, it doesn't prefer uppercase names over lowercase
+    @Override
+    public int compareTo(Plant secondPlant){
+        String plantOne = this.name.toLowerCase(), plantTwo = secondPlant.name.toLowerCase();
+        return plantOne.compareTo(plantTwo);
+    }
+    //To string method for printing info
+    @Override
+    public String toString() {
+        return "Plant: " +
+                "name=" + name +
+                ", description=" + description +
+                ", planted=" + planted +
+                ", lastWatering=" + lastWatering +
+                ", frequencyOfWatering=" + frequencyOfWatering;
+    }
+    //endregion
 }
